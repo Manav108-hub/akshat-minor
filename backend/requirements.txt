@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+scikit-learn
+numpy
+nest-asyncio
+python-jose
+passlib
+email-validator
+motor
