@@ -1,5 +1,5 @@
 from pydantic import BaseModel, EmailStr
-from typing import Optional, Dict, Any
+from typing import Optional
 
 # Authentication schemas
 class UserSignup(BaseModel):
@@ -17,17 +17,14 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     email: Optional[str] = None
 
+# Admin user creation with role
+class UserCreateWithRole(UserSignup):
+    role: str = "user"  # default to normal user
+
 # Response schemas
 class UserResponse(BaseModel):
     email: EmailStr
     message: str
-
-class UserProfile(BaseModel):
-    email: EmailStr
-
-class UserSettings(BaseModel):
-    email: EmailStr
-    settings: Dict[str, Any]
 
 class MessageResponse(BaseModel):
     message: str
