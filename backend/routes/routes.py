@@ -148,8 +148,9 @@ async def get_progress(current_user: str = Depends(get_current_user)):
 @router.post("/check-in/{habit_id}")
 async def mark_habit_as_done(habit_id: str, current_user: str = Depends(get_current_user)):
     habits_collection = db["habits"]
+    
+    # Ensure user owns the habit
     habit = await habits_collection.find_one({"_id": ObjectId(habit_id), "user_email": current_user})
-
     if not habit:
         raise HTTPException(status_code=404, detail="Habit not found")
 
@@ -157,7 +158,6 @@ async def mark_habit_as_done(habit_id: str, current_user: str = Depends(get_curr
     check_ins = habit.get("check_ins", [])
     last_checkin = check_ins[-1].date() if check_ins else None
 
-    # Only add if not already checked in today
     if last_checkin != today:
         check_ins.append(datetime.utcnow())
         await habits_collection.update_one(
@@ -165,10 +165,13 @@ async def mark_habit_as_done(habit_id: str, current_user: str = Depends(get_curr
             {"$set": {"check_ins": check_ins}}
         )
 
-    # Re-fetch updated habit
+    # Fetch updated habit
     updated_habit = await habits_collection.find_one({"_id": ObjectId(habit_id)})
+    
+    # Convert ObjectId to string manually
     updated_habit["id"] = str(updated_habit["_id"])
     updated_habit["current_streak"] = len(updated_habit["check_ins"])
+    del updated_habit["_id"]  # Optional: remove _id to avoid serialization issues
 
     return updated_habit
 
