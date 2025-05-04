@@ -29,7 +29,7 @@ export default function AuthForm({ mode }) {
 
       if (res.ok) {
         if (mode === 'login') {
-          router.push('/recommend');
+          router.push('/dashboard');
         } else {
           setSuccess('Account created successfully. Please login.');
           setTimeout(() => router.push('/login'), 2000);

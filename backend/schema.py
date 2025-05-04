@@ -1,7 +1,8 @@
 from pydantic import BaseModel, EmailStr
-from typing import Optional
+from typing import Optional, List
+from datetime import datetime
 
-# Authentication schemas
+# Auth Models
 class UserSignup(BaseModel):
     email: EmailStr
     password: str
@@ -17,14 +18,28 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     email: Optional[str] = None
 
-# Admin user creation with role
 class UserCreateWithRole(UserSignup):
-    role: str = "user"  # default to normal user
+    role: str = "user"
 
-# Response schemas
 class UserResponse(BaseModel):
     email: EmailStr
     message: str
 
 class MessageResponse(BaseModel):
     message: str
+
+# Habit Models
+class HabitCreate(BaseModel):
+    name: str
+    description: str
+
+class HabitResponse(BaseModel):
+    id: str
+    name: str
+    description: str
+    start_date: datetime
+    check_ins: List[datetime]
+    current_streak: int  # Calculated on response
+
+    class Config:
+        arbitrary_types_allowed = True
