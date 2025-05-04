@@ -44,10 +44,10 @@ export default function DashboardPage() {
           <h2 className="text-2xl font-bold text-indigo-600">Habit Tracker</h2>
           <div className="space-x-4">
             <button 
-              onClick={() => router.push('/dashboard')}
+              onClick={() => router.push('/recommend')}
               className="px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg"
             >
-              Dashboard
+              Recommendation
             </button>
             <button 
               onClick={async () => {
